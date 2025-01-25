@@ -38,9 +38,9 @@ namespace SuperUGuiUtilities {
 				SelectableState.Disabled => sprites.disabledSprite,
 				_ => null
 			};
-		public static void ApplyStateTo(this SpriteState sprites, Graphic target, SelectableState state) {
-			if (target is Image img)
-				img.overrideSprite = sprites.GetSpriteByState(state);
+		public static void ApplyStateTo(this SpriteState sprites, Image target, SelectableState state) {
+			if (target != null)
+				target.overrideSprite = sprites.GetSpriteByState(state);
 		}
 
 		public static string GetTriggerNameByState(this AnimationTriggers triggers, SelectableState state)
