@@ -24,6 +24,7 @@ namespace SuperUGuiUtilities {
 				selectable.interactable = interactable;
 		}
 
+
 		/// <summary>Try to add the given <paramref name="callback"/> to this selectable's <see cref="ISuperSelectable.OnStateChanged"/> event,
 		/// if the selectable is not null</summary>
 		/// <param name="super">The Super Selectable to modify</param>
@@ -49,6 +50,7 @@ namespace SuperUGuiUtilities {
 			return true;
 		}
 
+
 		/// <summary>Try to add the given <paramref name="callback"/> to this button's <see cref="Button.onClick"/> event, if the button is not null</summary>
 		/// <param name="button">The button to modify</param>
 		/// <param name="callback">The callback to add</param>
@@ -69,6 +71,7 @@ namespace SuperUGuiUtilities {
 			if (button != null)
 				button.onClick.RemoveAllListeners();
 		}
+
 
 		/// <summary>Try to add the given <paramref name="callback"/> to this dropdown's <see cref="TMP_Dropdown.onValueChanged"/> event, if the dropdown is not null</summary>
 		/// <param name="dropdown">The dropdown to modify</param>
@@ -91,6 +94,7 @@ namespace SuperUGuiUtilities {
 			if (dropdown != null)
 				dropdown.onValueChanged.RemoveAllListeners();
 		}
+
 
 		/// <summary>Try to add the given <paramref name="callback"/> to this input's <see cref="TMP_InputField.onValueChanged"/> event, if the input is not null</summary>
 		/// <param name="input">The input field to modify</param>
@@ -136,6 +140,7 @@ namespace SuperUGuiUtilities {
 				input.onSubmit.RemoveAllListeners();
 		}
 
+
 		/// <summary>Try to add the given <paramref name="callback"/> to this scrollbar's <see cref="Scrollbar.onValueChanged"/> event, if the scrollbar is not null</summary>
 		/// <param name="scroll">The scrollbar to modify</param>
 		/// <param name="callback">The callback to add</param>
@@ -158,6 +163,7 @@ namespace SuperUGuiUtilities {
 				scroll.onValueChanged.RemoveAllListeners();
 		}
 
+
 		/// <summary>Try to add the given <paramref name="callback"/> to this slider's <see cref="Slider.onValueChanged"/> event, if the slider is not null</summary>
 		/// <param name="slider">The slider to modify</param>
 		/// <param name="callback">The callback to add</param>
@@ -179,6 +185,82 @@ namespace SuperUGuiUtilities {
 			if (slider != null)
 				slider.onValueChanged.RemoveAllListeners();
 		}
+
+		/// <summary>Try to set the current <see cref="Slider.value"/> of this slider, if the slider is not null</summary>
+		/// <param name="slider">The slider to modify</param>
+		/// <param name="value">The new value to set the slider to</param>
+		/// <param name="silent">If true, the slider's <see cref="Slider.onValueChanged"/> event will not be fired</param>
+		/// <returns>false if this slider is null, true otherwise</returns>
+		public static bool TrySetValue(this Slider slider, float value, bool silent = false) {
+			if (slider == null)
+				return false;
+
+			if (silent)
+				slider.SetValueWithoutNotify(value);
+			else
+				slider.value = value;
+
+			return true;
+		}
+		/// <summary>Try to set the <see cref="Slider.minValue"/> of this slider, if the slider is not null</summary>
+		/// <param name="slider">The slider to modify</param>
+		/// <param name="minValue">The new minimum value to give the slider</param>
+		/// <param name="silent">If true, the slider's <see cref="Slider.onValueChanged"/> event will not be fired (when false, it will
+		///		fire because the value needs to be reset to ensure it is within the new valid range)</param>
+		/// <returns>false if this slider is null, true otherwise</returns>
+		public static bool TrySetMinValue(this Slider slider, float minValue, bool silent = false) {
+			if (slider == null)
+				return false;
+
+			if (silent) {
+				typeof(Slider).GetField("m_MinValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, minValue);
+				slider.SetValueWithoutNotify(slider.value);//Ensure we're within the valid range
+			} else
+				slider.minValue = minValue;
+
+			return true;
+		}
+		/// <summary>Try to set the <see cref="Slider.maxValue"/> of this slider, if the slider is not null</summary>
+		/// <param name="slider">The slider to modify</param>
+		/// <param name="maxValue">The new maximum value to give the slider</param>
+		/// <param name="silent">If true, the slider's <see cref="Slider.onValueChanged"/> event will not be fired (when false, it will
+		///		fire because the value needs to be reset to ensure it is within the new valid range)</param>
+		/// <returns>false if this slider is null, true otherwise</returns>
+		public static bool TrySetMaxValue(this Slider slider, float maxValue, bool silent = false) {
+			if (slider == null)
+				return false;
+
+			if (silent) {
+				typeof(Slider).GetField("m_MaxValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, maxValue);
+				slider.SetValueWithoutNotify(slider.value);//Ensure we're within the valid range
+			} else
+				slider.maxValue = maxValue;
+
+			return true;
+		}
+		/// <summary>Try to set the <see cref="Slider.minValue"/> and <see cref="Slider.maxValue"/> of this slider, if the slider is not null</summary>
+		/// <param name="slider">The slider to modify</param>
+		/// <param name="minValue">The new minimum value to give the slider</param>
+		/// <param name="maxValue">The new maximum value to give the slider</param>
+		/// <param name="silent">If true, the slider's <see cref="Slider.onValueChanged"/> event will not be fired (when false, it will
+		///		fire because the value needs to be reset to ensure it is within the new valid range)</param>
+		/// <returns>false if this slider is null, true otherwise</returns>
+		public static bool TrySetRange(this Slider slider, float minValue, float maxValue, bool silent = false) {
+			if (slider == null)
+				return false;
+
+			typeof(Slider).GetField("m_MinValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, minValue);
+			typeof(Slider).GetField("m_MaxValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, maxValue);
+
+			//Ensure we're within the valid range
+			if (silent)
+				slider.SetValueWithoutNotify(slider.value);
+			else
+				slider.value = slider.value;
+
+			return true;
+		}
+
 
 		/// <summary>Try to add the given <paramref name="callback"/> to this toggle's <see cref="Toggle.onValueChanged"/> event, if the toggle is not null</summary>
 		/// <param name="toggle">The toggle to modify</param>
