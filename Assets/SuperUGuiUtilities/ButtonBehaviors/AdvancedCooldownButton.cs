@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +9,8 @@ namespace SuperUGuiUtilities {
 		[SerializeField]
 		private Slider progressFill;
 
-		private Coroutine cooldownRoutine;
+		private Tween cooldownTween;
+		private float elapsedFallback = 0;
 
 
 		protected override void Start() {
@@ -18,18 +19,18 @@ namespace SuperUGuiUtilities {
 			progressFill.TrySetValue(0);
 		}
 
-		protected override void OnClick() => cooldownRoutine = StartCoroutine(CooldownRoutine());
+		public void EndCooldown() => cooldownTween?.Kill(true);
 
-		private IEnumerator CooldownRoutine() {
+		protected override void OnClick() {
 			targetButton.TrySetInteractable(false);
-			float timePassed = 0;
-
-			while (timePassed < CooldownS) {
-				progressFill.TrySetValue(timePassed);
-				yield return null;
-				timePassed += Time.deltaTime;
-			}
-
+			cooldownTween = progressFill == null
+				? (Tween)DOTween.To(() => elapsedFallback, (x) => elapsedFallback = x, CooldownS, CooldownS)
+				: DOTween.To(() => progressFill.value, (x) => progressFill.value = x, CooldownS, CooldownS);
+			cooldownTween.OnComplete(OnCooldownComplete);
+		}
+		private void OnCooldownComplete() {
+			cooldownTween = null;
+			elapsedFallback = 0;
 			progressFill.TrySetValue(0);
 			targetButton.TrySetInteractable(true);
 		}

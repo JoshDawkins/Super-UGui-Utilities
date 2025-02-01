@@ -284,6 +284,17 @@ namespace SuperUGuiUtilities {
 				toggle.onValueChanged.RemoveAllListeners();
 		}
 
+		/// <summary>Try to get the current state of this toggle, if it is not null</summary>
+		/// <param name="toggle">The toggle to check</param>
+		/// <param name="isOn">If the method returns true, will contain the toggle's <see cref="Toggle.isOn"/> value</param>
+		/// <returns>False if the toggle is null or destroyed, true otherwise</returns>
+		public static bool TryGetIsOn(this Toggle toggle, out bool isOn) {
+			if (toggle == null)
+				return isOn = false;
+
+			isOn = toggle.isOn;
+			return true;
+		}
 		/// <summary>Try to set the state of this toggle, if it is not null</summary>
 		/// <param name="toggle">The toggle to modify</param>
 		/// <param name="isOn">Whether or not the toggle should be on</param>
