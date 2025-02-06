@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace SuperUGuiUtilities {
+
 	public static class GeneralExtensions {
 		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action) {
 			if (collection == null || action == null)
@@ -13,6 +14,21 @@ namespace SuperUGuiUtilities {
 			foreach (T item in collection)
 				action.Invoke(item);
 		}
+
+
+		public static bool TryGetDimension(this Rect rect, RectTransform.Axis axis, out float dimension) {
+			if (rect == null) {
+				dimension = 0;
+				return false;
+			}
+
+			dimension = axis == RectTransform.Axis.Horizontal
+				? rect.width : rect.height;
+			return true;
+		}
+		public static bool TryGetDimension(this RectTransform rect, RectTransform.Axis axis, out float dimension)
+			=> rect.rect.TryGetDimension(axis, out dimension);
+
 
 		public static Coroutine TryStartCoroutine(this MonoBehaviour behavior, IEnumerator coroutine)
 			=> behavior == null ? null : behavior.StartCoroutine(coroutine);
