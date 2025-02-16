@@ -1,5 +1,4 @@
 ﻿using System;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,7 @@ namespace SuperUGuiUtilities {
 
 		[Serializable]
 		private class AnimatorHandler {
-			[SerializeField, Required]
+			[SerializeField]
 			private Animator target;
 			[SerializeField]
 			private AnimationTriggers triggers = new();

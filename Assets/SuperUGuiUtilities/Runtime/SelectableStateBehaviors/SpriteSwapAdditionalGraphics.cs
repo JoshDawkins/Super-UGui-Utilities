@@ -1,5 +1,4 @@
 ﻿using System;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +14,7 @@ namespace SuperUGuiUtilities {
 
 		[Serializable]
 		private class GraphicHandler {
-			[SerializeField, Required]
+			[SerializeField]
 			private Image target;
 			[SerializeField]
 			private SpriteState sprites;

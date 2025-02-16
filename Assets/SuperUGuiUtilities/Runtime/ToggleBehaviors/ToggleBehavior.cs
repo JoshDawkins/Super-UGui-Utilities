@@ -1,11 +1,10 @@
-﻿using NaughtyAttributes;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SuperUGuiUtilities {
 	public abstract class ToggleBehavior : UIBehaviour {
-		[field: SerializeField, Required]
+		[field: SerializeField]
 		public Toggle TargetToggle { get; private set; }
 		[field: SerializeField, ShowIf(nameof(triggerOnEnableHandling), TriggerOnEnableHandling.Choose)]
 		public bool TriggerOnEnable { get; private set; }

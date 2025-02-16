@@ -1,11 +1,10 @@
-﻿using NaughtyAttributes;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SuperUGuiUtilities {
 	public abstract class SelectableStateBehavior : UIBehaviour {
-		[SerializeField, Required, Implements(typeof(ISuperSelectable))]
+		[SerializeField, Tooltip("Must be a Selectable type that implements ISuperSelectable")]
 		protected Selectable targetSelectable;
 		protected ISuperSelectable Super => targetSelectable as ISuperSelectable;
 

@@ -1,11 +1,10 @@
-﻿using NaughtyAttributes;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SuperUGuiUtilities {
 	public abstract class ButtonBehavior : UIBehaviour {
-		[SerializeField, Required]
+		[SerializeField]
 		protected Button targetButton;
 
 		protected override void OnEnable() => targetButton.TryAddClickListener(OnClick);

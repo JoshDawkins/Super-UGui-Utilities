@@ -1,6 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace SuperUGuiUtilities {
@@ -20,26 +19,27 @@ namespace SuperUGuiUtilities {
 
 
 		[Serializable]
-		private class ElementConfig {
-			[SerializeField, AllowNesting, Required]
+		public class ElementConfig {
+			[SerializeField]
 			private RectTransform target;
 			[SerializeField]
 			private bool controlAnchors = false;
 
 			[SerializeField, Header("On Settings")]
 			private Vector2 onAnchoredPos;
-			[SerializeField]
-			[AllowNesting, ShowIf(nameof(controlAnchors))]
+			[SerializeField, ShowIf(nameof(controlAnchors))]
 			private Vector2 onAnchorMin, onAnchorMax, onPivot;
 
 			[SerializeField, Header("Off Settings")]
 			private Vector2 offAnchoredPos;
-			[SerializeField]
-			[AllowNesting, ShowIf(nameof(controlAnchors))]
+			[SerializeField, ShowIf(nameof(controlAnchors))]
 			private Vector2 offAnchorMin, offAnchorMax, offPivot;
 
 
 			public Tween Animate(bool isOn, float duration) {
+				if (target == null)
+					return null;
+				
 				Tween result = target.DOAnchorPos(isOn ? onAnchoredPos : offAnchoredPos, duration);
 
 				if (controlAnchors)
@@ -52,6 +52,9 @@ namespace SuperUGuiUtilities {
 				return result;
 			}
 			public void SetWithoutAnimation(bool isOn) {
+				if (target == null)
+					return;
+				
 				if (controlAnchors) {
 					target.anchorMin = isOn ? onAnchorMin : offAnchorMin;
 					target.anchorMax = isOn ? onAnchorMax : offAnchorMax;

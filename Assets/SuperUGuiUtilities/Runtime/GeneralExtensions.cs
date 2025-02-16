@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 namespace SuperUGuiUtilities {
-
 	public static class GeneralExtensions {
 		public static void ForEach<T>(this IEnumerable<T> collection, Action<T> action) {
 			if (collection == null || action == null)
@@ -28,6 +27,15 @@ namespace SuperUGuiUtilities {
 		}
 		public static bool TryGetDimension(this RectTransform rect, RectTransform.Axis axis, out float dimension)
 			=> rect.rect.TryGetDimension(axis, out dimension);
+
+
+		public static bool TrySetColor(this Graphic graphic, Color color) {
+			if (graphic == null)
+				return false;
+
+			graphic.color = color;
+			return true;
+		}
 
 
 		public static Coroutine TryStartCoroutine(this MonoBehaviour behavior, IEnumerator coroutine)

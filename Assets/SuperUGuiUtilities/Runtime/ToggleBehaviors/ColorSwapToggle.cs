@@ -1,6 +1,5 @@
 ﻿using System;
 using DG.Tweening;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -22,17 +21,17 @@ namespace SuperUGuiUtilities {
 
 		[Serializable]
 		private class GraphicConfig {
-			[SerializeField, AllowNesting, Required]
+			[SerializeField]
 			private Graphic target;
 			[SerializeField]
 			private Color onColor = Color.white,
 				offColor = Color.white;
 
 			public Tween Animate(bool isOn, float duration)
-				=> target.DOColor(isOn ? onColor : offColor, duration);
+				=> target == null ? null : target.DOColor(isOn ? onColor : offColor, duration);
 
 			public void SetWithoutAnimation(bool isOn)
-				=> target.color = isOn ? onColor : offColor;
+				=> target.TrySetColor(isOn ? onColor : offColor);
 		}
 	}
 }

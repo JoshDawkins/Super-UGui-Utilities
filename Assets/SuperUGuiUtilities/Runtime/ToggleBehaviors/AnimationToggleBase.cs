@@ -1,5 +1,4 @@
 ﻿using DG.Tweening;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace SuperUGuiUtilities {

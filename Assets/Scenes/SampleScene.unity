@@ -1112,7 +1112,7 @@ MonoBehaviour:
   <Easing>k__BackingField: 10
   targets:
   - target: {fileID: 879279181}
-    controlAnchors: 1
+    controlAnchors: 0
     onAnchoredPos: {x: 0, y: 0}
     onAnchorMin: {x: 1, y: 0}
     onAnchorMax: {x: 1, y: 1}
@@ -1289,7 +1289,7 @@ MonoBehaviour:
   <Easing>k__BackingField: 10
   targets:
   - target: {fileID: 1552256427}
-    controlAnchors: 1
+    controlAnchors: 0
     onAnchoredPos: {x: 0, y: 0}
     onAnchorMin: {x: 1, y: 0}
     onAnchorMax: {x: 1, y: 1}
@@ -1646,7 +1646,7 @@ MonoBehaviour:
   <Easing>k__BackingField: 10
   targets:
   - target: {fileID: 592431076}
-    controlAnchors: 1
+    controlAnchors: 0
     onAnchoredPos: {x: 0, y: 0}
     onAnchorMin: {x: 1, y: 0}
     onAnchorMax: {x: 1, y: 1}
