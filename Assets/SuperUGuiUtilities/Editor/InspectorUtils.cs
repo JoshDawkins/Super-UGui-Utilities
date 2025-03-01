@@ -1,4 +1,6 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace SuperUGuiUtilities.Editor {
@@ -7,6 +9,12 @@ namespace SuperUGuiUtilities.Editor {
 
 		public static void ShowHide(this VisualElement elem, bool show)
 			=> elem.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+
+		public static void SetErrorMessageStyles(this Label label) {
+			label.style.whiteSpace = WhiteSpace.Normal;
+			label.style.unityFontStyleAndWeight = FontStyle.Bold;
+			label.style.paddingTop = 5;
+		}
 
 		public static object GetTargetParent(this SerializedProperty prop) {
 			object obj = prop.serializedObject.targetObject;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -49,6 +50,21 @@ namespace SuperUGuiUtilities {
 
 			value = enumerable.ElementAt(index);
 			return true;
+		}
+
+		public static MethodInfo GetMethodRecursive(this Type type, string methodName, BindingFlags bindingFlags, params Type[] argTypes) {
+			if (argTypes == null)
+				argTypes = Array.Empty<Type>();
+			
+			while (type != null) {
+				MethodInfo method = type.GetMethod(methodName, bindingFlags, null, argTypes, null);
+				if (method != null)
+					return method;
+
+				type = type.BaseType;
+			}
+
+			return null;
 		}
 	}
 }

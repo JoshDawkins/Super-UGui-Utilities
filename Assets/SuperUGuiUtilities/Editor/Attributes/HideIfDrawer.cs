@@ -2,9 +2,9 @@
 using UnityEditor.UIElements;
 
 namespace SuperUGuiUtilities.Editor {
-	[CustomPropertyDrawer(typeof(ShowIfAttribute))]
-	public class ShowIfDrawer : ConditionalDrawer<ShowIfAttribute> {
+	[CustomPropertyDrawer(typeof(HideIfAttribute))]
+	public class HideIfDrawer : ConditionalDrawer<HideIfAttribute> {
 		protected override void HandleFieldDisplay(PropertyField field, bool conditionMet)
-			=> field.ShowHide(conditionMet);
+			=> field.ShowHide(!conditionMet);
 	}
 }
