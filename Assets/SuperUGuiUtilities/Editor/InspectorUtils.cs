@@ -35,5 +35,11 @@ namespace SuperUGuiUtilities.Editor {
 
 			return obj;
 		}
+
+		public static string GetBackingFieldName(string propName) => $"<{propName}>k__BackingField";
+		public static SerializedProperty FindBackingField(this SerializedObject serializedObject, string propName)
+			=> serializedObject?.FindProperty(GetBackingFieldName(propName));
+		public static SerializedProperty FindBackingFieldRelative(this SerializedProperty serializedProperty, string propName)
+			=> serializedProperty?.FindPropertyRelative(GetBackingFieldName(propName));
 	}
 }
