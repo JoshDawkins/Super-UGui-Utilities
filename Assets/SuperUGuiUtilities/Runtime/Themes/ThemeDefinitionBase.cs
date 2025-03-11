@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using UnityEngine;
 
 namespace SuperUGuiUtilities {
@@ -8,24 +11,19 @@ namespace SuperUGuiUtilities {
 		[field: SerializeField]
 		public string ThemeName { get; private set; }
 
+		public abstract ReadOnlyCollection<TStyle> AllStyles { get; }
 		public abstract TStyle GetStyle(TId styleId);
-	}
 
-	[Serializable]
-	public abstract class ThemeStyleBase<TId>
-	where TId : struct, Enum {
-		[field: SerializeField, DisableIf(nameof(_preventEditing))]
-		public TId StyleId { get; private set; }
-#pragma warning disable CS0414 //disable set but not used warning; used by DisableIf on StyleId via reflection
-		//This value is set by reflection in SimpleThemeDefinitionBase; init-only prop would be better, but alas, Unity is too far behind
-		[SerializeField, HideInInspector]
-		private bool _preventEditing = false;
-#pragma warning restore CS0414
+		public bool TryApplyStyleTo<T>(T target, TId styleId) where T : UnityEngine.Object {
+			TStyle style = GetStyle(styleId);
+			if (style is IProvidesThemeFor<T> applicableTheme) {
+				applicableTheme.ApplyThemeTo(target);
+				return true;
+			}
+			return false;
+		}
 
-		public override string ToString() => $"StyleId: {StyleId}";
-	}
-
-	public interface IProvidesThemeFor<T> where T : UnityEngine.Object {
-		void ApplyThemeTo(T target);
+		public List<TId> GetValidIdsForTargetType<T>() where T : UnityEngine.Object
+			=> AllStyles.Where(style => style is IProvidesThemeFor<T>).Select(style => style.StyleId).ToList();
 	}
 }

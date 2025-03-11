@@ -66,6 +66,17 @@ namespace SuperUGuiUtilities {
 
 			return null;
 		}
+		public static PropertyInfo GetPropertyRecursive(this Type type, string propName, BindingFlags bindingFlags) {
+			while (type != null) {
+				PropertyInfo prop = type.GetProperty(propName, bindingFlags);
+				if (prop != null)
+					return prop;
+
+				type = type.BaseType;
+			}
+
+			return null;
+		}
 		public static FieldInfo GetFieldRecursive(this Type type, string fieldName, BindingFlags bindingFlags) {
 			while (type != null) {
 				FieldInfo field = type.GetField(fieldName, bindingFlags);

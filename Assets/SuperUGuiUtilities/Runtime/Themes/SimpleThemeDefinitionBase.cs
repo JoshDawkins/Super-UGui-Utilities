@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
-using BindingFlags = System.Reflection.BindingFlags;
 
 namespace SuperUGuiUtilities {
 	public abstract class SimpleThemeDefinitionBase<TId, TStyle, TTarget> : ThemeDefinitionBase<TId, TStyle>
@@ -13,14 +12,14 @@ namespace SuperUGuiUtilities {
 		[SerializeField]
 		protected List<TStyle> styles;
 
+		public override ReadOnlyCollection<TStyle> AllStyles => styles.AsReadOnly();
+		public override TStyle GetStyle(TId styleId) => styles.FirstOrDefault(s => s.StyleId.Equals(styleId));
+
 #if UNITY_EDITOR
 		//This ensures that we always have a style for each ID, even when the enum definition is changed.
 		//  Only applied in editor, since enum definitions can't change at runtime and values are serialized.
 		private void OnEnable() {
 			Type styleType = typeof(TStyle);
-			PropertyInfo styleIdProp = styleType.GetProperty("StyleId").DeclaringType.GetProperty("StyleId");
-			FieldInfo preventEditingField = styleType.GetFieldRecursive("_preventEditing",
-				BindingFlags.Instance | BindingFlags.NonPublic);
 			TId[] ids = (TId[])Enum.GetValues(typeof(TId));
 
 			styles.RemoveAll(style => !ids.Contains(style.StyleId));
@@ -30,8 +29,8 @@ namespace SuperUGuiUtilities {
 					continue;
 
 				TStyle style = (TStyle)Activator.CreateInstance(styleType);
-				styleIdProp.SetValue(style, id, BindingFlags.Instance | BindingFlags.NonPublic, null, null, null);
-				preventEditingField.SetValue(style, true);
+				style.StyleId = id;
+				style._preventEditing = true;
 				styles.Add(style);
 			}
 
@@ -39,7 +38,6 @@ namespace SuperUGuiUtilities {
 		}
 #endif
 
-		public override TStyle GetStyle(TId styleId) => styles.FirstOrDefault(s => s.StyleId.Equals(styleId));
 		public void ApplyThemeTo(TTarget target, TId styleId) => GetStyle(styleId)?.ApplyThemeTo(target);
 	}
 }
