@@ -8,6 +8,8 @@ namespace SuperUGuiUtilities {
 		public float CooldownS { get; private set; }
 		[SerializeField]
 		private Slider progressFill;
+		[SerializeField]
+		private bool startFilled;
 
 		private Tween cooldownTween;
 		private float elapsedFallback = 0;
@@ -16,7 +18,7 @@ namespace SuperUGuiUtilities {
 		protected override void Start() {
 			base.Start();
 			progressFill.TrySetRange(0, CooldownS);
-			progressFill.TrySetValue(0);
+			progressFill.TrySetValue(startFilled ? CooldownS : 0);
 		}
 
 		public void EndCooldown() => cooldownTween?.Kill(true);
@@ -25,13 +27,13 @@ namespace SuperUGuiUtilities {
 			targetButton.TrySetInteractable(false);
 			cooldownTween = progressFill == null
 				? (Tween)DOTween.To(() => elapsedFallback, (x) => elapsedFallback = x, CooldownS, CooldownS)
-				: DOTween.To(() => progressFill.value, (x) => progressFill.value = x, CooldownS, CooldownS);
+				: progressFill.DOValue(CooldownS, CooldownS).ChangeStartValue(0);
 			cooldownTween.OnComplete(OnCooldownComplete);
 		}
 		private void OnCooldownComplete() {
 			cooldownTween = null;
 			elapsedFallback = 0;
-			progressFill.TrySetValue(0);
+			progressFill.TrySetValue(startFilled ? CooldownS : 0);
 			targetButton.TrySetInteractable(true);
 		}
 	}

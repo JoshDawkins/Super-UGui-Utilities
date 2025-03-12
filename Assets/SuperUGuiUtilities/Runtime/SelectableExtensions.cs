@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using BindingFlags = System.Reflection.BindingFlags;
 
 namespace SuperUGuiUtilities {
 	public static class SelectableExtensions {
@@ -213,7 +214,7 @@ namespace SuperUGuiUtilities {
 				return false;
 
 			if (silent) {
-				typeof(Slider).GetField("m_MinValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, minValue);
+				typeof(Slider).GetField("m_MinValue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(slider, minValue);
 				slider.SetValueWithoutNotify(slider.value);//Ensure we're within the valid range
 			} else
 				slider.minValue = minValue;
@@ -231,7 +232,7 @@ namespace SuperUGuiUtilities {
 				return false;
 
 			if (silent) {
-				typeof(Slider).GetField("m_MaxValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, maxValue);
+				typeof(Slider).GetField("m_MaxValue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(slider, maxValue);
 				slider.SetValueWithoutNotify(slider.value);//Ensure we're within the valid range
 			} else
 				slider.maxValue = maxValue;
@@ -249,8 +250,8 @@ namespace SuperUGuiUtilities {
 			if (slider == null)
 				return false;
 
-			typeof(Slider).GetField("m_MinValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, minValue);
-			typeof(Slider).GetField("m_MaxValue", System.Reflection.BindingFlags.NonPublic).SetValue(slider, maxValue);
+			typeof(Slider).GetFieldRecursive("m_MinValue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(slider, minValue);
+			typeof(Slider).GetFieldRecursive("m_MaxValue", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(slider, maxValue);
 
 			//Ensure we're within the valid range
 			if (silent)
