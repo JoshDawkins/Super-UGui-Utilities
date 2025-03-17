@@ -162,7 +162,6 @@ namespace SuperUGuiUtilities {
 				_ => string.Empty
 			};
 		public static void ApplyStateTo(this AnimationTriggers triggers, Animator target, SelectableState state) {
-#if PACKAGE_ANIMATION
             if (triggers == null || target == null || !target.isActiveAndEnabled || !target.hasBoundPlayables)
                 return;
 
@@ -177,7 +176,6 @@ namespace SuperUGuiUtilities {
             target.ResetTrigger(triggers.disabledTrigger);
 
             target.SetTrigger(trigger);
-#endif
 		}
 	}
 }
