@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 427e36f520382aa4b8e4baccac948a76, type: 3}
+  m_Name: FullThemeA
+  m_EditorClassIdentifier: 
+  <ThemeName>k__BackingField: Full - A
+  containerStyle:
+    <StyleId>k__BackingField: 0
+    _preventEditing: 1
+    <AnchoredPosition>k__BackingField: {x: 0, y: -300}
+    <SizeDelta>k__BackingField: {x: 500, y: 150}
+    <AnchorMin>k__BackingField: {x: 0, y: 1}
+    <AnchorMax>k__BackingField: {x: 0, y: 1}
+    <Pivot>k__BackingField: {x: 0, y: 1}
+  backgroundStyle:
+    <StyleId>k__BackingField: 1
+    _preventEditing: 1
+    <Sprite>k__BackingField: {fileID: 0}
+    <Color>k__BackingField: {r: 0.7949448, g: 0.8287799, b: 0.8301887, a: 1}
+  iconStyle:
+    <StyleId>k__BackingField: 2
+    _preventEditing: 1
+    <Sprite>k__BackingField: {fileID: 21300000, guid: e3df635701248a4479631bf4ec3c555d, type: 3}
+    <Color>k__BackingField: {r: 0, g: 1, b: 0, a: 1}
+  headerStyle:
+    <StyleId>k__BackingField: 3
+    _preventEditing: 1
+    <FontSize>k__BackingField: 24
+    <FontStyle>k__BackingField: 21
+    <FontColor>k__BackingField: {r: 0, g: 0, b: 0, a: 1}
+  descriptionStyle:
+    <StyleId>k__BackingField: 4
+    _preventEditing: 1
+    <FontSize>k__BackingField: 18
+    <FontStyle>k__BackingField: 0
+    <FontColor>k__BackingField: {r: 0, g: 0, b: 0, a: 1}

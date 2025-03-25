@@ -5,7 +5,7 @@ using UnityEngine;
 namespace SuperUGuiUtilities {
 	[ExecuteAlways]
 	public abstract class ThemedElementBase<TTarget, TManager, TTheme, TId, TStyle> : MonoBehaviour
-	where TTarget : UnityEngine.Object
+	where TTarget : Component
 	where TManager : ThemeManagerBase<TTheme, TId, TStyle, TManager>
 	where TTheme : ThemeDefinitionBase<TId, TStyle>
 	where TId : struct, Enum
@@ -52,7 +52,9 @@ namespace SuperUGuiUtilities {
 		}
 #endif
 
-		private void UpdateTheme() {
+		private void UpdateTheme() => this.InvokeAtEndOfFrame(UpdateThemeInternal);//Ensures we're not calling built-in methods at an inappropriate time
+			
+		private void UpdateThemeInternal() {
 			if (!enabled || target == null || manager == null)
 				return;
 

@@ -8,7 +8,7 @@ namespace SuperUGuiUtilities {
 	public abstract class SimpleThemeDefinitionBase<TId, TStyle, TTarget> : ThemeDefinitionBase<TId, TStyle>
 	where TId : struct, Enum
 	where TStyle : ThemeStyleBase<TId>, IProvidesThemeFor<TTarget>
-	where TTarget : UnityEngine.Object {
+	where TTarget : Component {
 		[SerializeField]
 		protected List<TStyle> styles;
 

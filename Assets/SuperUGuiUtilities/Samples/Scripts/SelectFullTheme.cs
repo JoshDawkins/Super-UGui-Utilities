@@ -1,11 +1,10 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace SuperUGuiUtilities.Samples {
-	public class SelectSimpleTheme : UIBehaviour {
+	public class SelectFullTheme : UIBehaviour {
 		[SerializeField]
-		private SimpleThemeExampleDropdown dropdown;
+		private FullThemeExampleDropdown dropdown;
 
 		protected override void OnEnable() {
 			base.OnEnable();
@@ -18,15 +17,15 @@ namespace SuperUGuiUtilities.Samples {
 			dropdown.OnOptionChosen -= OnOptionChosen;
 		}
 
-		private void OnOptionChosen(SimpleThemeExample theme)
-			=> SimpleThemeExampleManager.Instance.TrySetCurrentTheme(theme);
+		private void OnOptionChosen(FullThemeExample theme)
+			=> FullThemeExampleManager.Instance.TrySetCurrentTheme(theme);
 
 #if UNITY_EDITOR
 		protected override void OnValidate() {
 			base.OnValidate();
 
 			if (dropdown == null)
-				dropdown = GetComponent<SimpleThemeExampleDropdown>();
+				dropdown = GetComponent<FullThemeExampleDropdown>();
 		}
 #endif
 	}

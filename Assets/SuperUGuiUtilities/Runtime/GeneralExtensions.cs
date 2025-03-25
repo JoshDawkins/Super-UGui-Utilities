@@ -42,6 +42,8 @@ namespace SuperUGuiUtilities {
 			=> behavior == null ? null : behavior.StartCoroutine(coroutine);
 		public static Coroutine InvokeNextFrame(this MonoBehaviour behaviour, Action action)
 			=> behaviour.TryStartCoroutine(WaitRoutine(action, null));
+		public static Coroutine InvokeAtEndOfFrame(this MonoBehaviour behaviour, Action action)
+			=> behaviour.TryStartCoroutine(WaitRoutine(action, new WaitForEndOfFrame()));
 		public static Coroutine InvokeAfterSeconds(this MonoBehaviour behavior, Action action, float delayS)
 			=> behavior.TryStartCoroutine(WaitRoutine(action, new WaitForSeconds(delayS)));
 		public static Coroutine InvokeAfterSecondsRealtime(this MonoBehaviour behavior, Action action, float delayS)

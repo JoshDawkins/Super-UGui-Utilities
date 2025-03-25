@@ -2,7 +2,8 @@
     "name": "SuperUGuiUtilities.Samples",
     "rootNamespace": "",
     "references": [
-        "GUID:d09df5d8d777de647a5895b33e4efba5"
+        "GUID:d09df5d8d777de647a5895b33e4efba5",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

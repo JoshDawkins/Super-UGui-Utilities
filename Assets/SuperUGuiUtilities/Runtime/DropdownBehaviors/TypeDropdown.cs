@@ -6,7 +6,7 @@ using UnityEngine.Events;
 namespace SuperUGuiUtilities {
 	public abstract class TypeDropdown<T> : DropdownBehavior {
 		[SerializeField]
-		private List<T> options;
+		protected List<T> options = new();
 		[SerializeField]
 		private UnityEvent<T> onOptionChosen = new();
 

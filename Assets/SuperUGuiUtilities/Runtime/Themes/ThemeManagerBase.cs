@@ -9,7 +9,20 @@ namespace SuperUGuiUtilities {
 	where TId : struct, Enum
 	where TStyle : ThemeStyleBase<TId>
 	where TSelf : ThemeManagerBase<TTheme, TId, TStyle, TSelf> {
-		public static TSelf Instance => _instance ??= Resources.FindObjectsOfTypeAll<TSelf>().ElementAtOrDefault(0);
+		public static TSelf Instance {
+			get {
+				if (_instance == null) {
+					_instance = Resources.FindObjectsOfTypeAll<TSelf>().ElementAtOrDefault(0);
+					if (_instance != null && _instance.TryGetThemeAt(_instance.CurrentThemeIndex, out TTheme curr)) {
+						curr.OnThemeUpdated -= _instance.FireThemeChanged;
+						curr.OnThemeUpdated += _instance.FireThemeChanged;
+					}
+				}
+
+				return _instance;
+			}
+		}
+
 		private static TSelf _instance;
 
 
@@ -21,17 +34,24 @@ namespace SuperUGuiUtilities {
         public int CurrentThemeIndex {
 			get => _currentThemeIndex;
 			set {
-				value = Mathf.Clamp(value, 0, validThemes.Count);
-				if (value != _currentThemeIndex) {
-					_currentThemeIndex = value;
-					OnThemeChanged?.Invoke();
-				}
+				value = Mathf.Clamp(value, 0, validThemes.Count - 1);
+
+				if (TryGetThemeAt(_currentThemeIndex, out TTheme curr))
+					curr.OnThemeUpdated -= FireThemeChanged;
+
+				_currentThemeIndex = value;
+				FireThemeChanged();
+
+				if (TryGetThemeAt(_currentThemeIndex, out curr))
+					curr.OnThemeUpdated += FireThemeChanged;
 			}
 		}
 		public TTheme CurrentTheme => this[CurrentThemeIndex];
 		public TTheme this[int i] => TryGetThemeAt(i, out TTheme theme) ? theme : null;
+		public IReadOnlyCollection<TTheme> ValidThemes => validThemes.AsReadOnly();
 
 		public event Action OnThemeChanged;
+		private void FireThemeChanged() => OnThemeChanged?.Invoke();
 
 
 #if UNITY_EDITOR
@@ -85,11 +105,11 @@ namespace SuperUGuiUtilities {
 			return removed;
 		}
 
-		public bool TryApplyStyleTo<T>(T target, TId styleId) where T : UnityEngine.Object {
+		public bool TryApplyStyleTo<T>(T target, TId styleId) where T : Component {
 			TTheme theme = CurrentTheme;
 			return theme != null && theme.TryApplyStyleTo(target, styleId);
 		}
-		public List<TId> GetValidIdsForTargetType<T>() where T : UnityEngine.Object {
+		public List<TId> GetValidIdsForTargetType<T>() where T : Component {
 			TTheme theme = CurrentTheme;
 			return theme == null ? null : theme.GetValidIdsForTargetType<T>();
 		}
