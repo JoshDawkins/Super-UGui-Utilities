@@ -15,6 +15,24 @@ namespace SuperUGuiUtilities {
 		}
 
 
+		public static bool TrySetActive(this GameObject go, bool active) {
+			if (go == null)
+				return false;
+
+			go.SetActive(active);
+			return true;
+		}
+		public static bool TrySetActive(this Component component, bool active)
+			=> component == null ? false : component.gameObject.TrySetActive(active);
+		public static bool TrySetEnabled(this Behaviour behavior, bool active) {
+			if (behavior == null)
+				return false;
+
+			behavior.enabled = active;
+			return true;
+		}
+
+
 		public static bool TryGetDimension(this Rect rect, RectTransform.Axis axis, out float dimension) {
 			if (rect == null) {
 				dimension = 0;
