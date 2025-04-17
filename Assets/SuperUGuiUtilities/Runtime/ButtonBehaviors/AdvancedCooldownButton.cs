@@ -6,6 +6,8 @@ namespace SuperUGuiUtilities {
 	public class AdvancedCooldownButton : ButtonBehavior {
 		[field: SerializeField]
 		public float CooldownS { get; private set; }
+		[field: SerializeField]
+		public Ease Easing { get; private set; }
 		[SerializeField]
 		private Slider progressFill;
 		[SerializeField]
@@ -28,7 +30,7 @@ namespace SuperUGuiUtilities {
 			cooldownTween = progressFill == null
 				? (Tween)DOTween.To(() => elapsedFallback, (x) => elapsedFallback = x, CooldownS, CooldownS)
 				: progressFill.DOValue(CooldownS, CooldownS).ChangeStartValue(0);
-			cooldownTween.OnComplete(OnCooldownComplete);
+			cooldownTween.SetEase(Easing).OnComplete(OnCooldownComplete);
 		}
 		private void OnCooldownComplete() {
 			cooldownTween = null;

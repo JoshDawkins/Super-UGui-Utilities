@@ -52,8 +52,11 @@ namespace SuperUGuiUtilities {
 		}
 #endif
 
-		private void UpdateTheme() => this.InvokeAtEndOfFrame(UpdateThemeInternal);//Ensures we're not calling built-in methods at an inappropriate time
-			
+		private void UpdateTheme() {
+			if (isActiveAndEnabled && this != null)
+				this.InvokeAtEndOfFrame(UpdateThemeInternal);//Ensures we're not calling built-in methods at an inappropriate time
+		}
+
 		private void UpdateThemeInternal() {
 			if (!enabled || target == null || manager == null)
 				return;
