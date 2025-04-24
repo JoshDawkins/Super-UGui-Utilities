@@ -39,9 +39,11 @@ namespace SuperUGuiUtilities {
 			var enabled = selectable.enabled;
 			var hideFlags = selectable.hideFlags;
 			var name = selectable.name;
-			var runInEditMode = selectable.runInEditMode;
 			var tag = selectable.tag;
 			var useGUILayout = selectable.useGUILayout;
+#if UNITY_EDITOR
+			var runInEditMode = selectable.runInEditMode;
+#endif
 
 			Component.DestroyImmediate(selectable);
 			TSuper super = go.AddComponent<TSuper>();
@@ -58,9 +60,11 @@ namespace SuperUGuiUtilities {
 			super.enabled = enabled;
 			super.hideFlags = hideFlags;
 			super.name = name;
-			super.runInEditMode = runInEditMode;
 			super.tag = tag;
 			super.useGUILayout = useGUILayout;
+#if UNITY_EDITOR
+			super.runInEditMode = runInEditMode;
+#endif
 
 			return super;
 		}
