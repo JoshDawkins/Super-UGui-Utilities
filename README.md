@@ -85,7 +85,8 @@ public enum MyThemeStyleId {
 	BannerImage,
 	Icon,
 	...
-}```
+}
+```
 
 #### One or More Theme Style Classes
 For each programmatic component type you will want your theme to be able to apply styles to, you will need to create a theme style class, which defines what properties are configurable for a style applied to a particular component type and how those properties are to be applied to the component. Note that these are plain C# classes, not MonoBehaviours or another Unity type. To define your theme style class(es), walk through the following steps:
@@ -100,12 +101,14 @@ public class MyImageThemeStyle : MyThemeStyleBase {
 
 }
 
-//Additional sub-classes for other component types```
+//Additional sub-classes for other component types
+```
 
 2. Add the `[Serializable]` attribute from the `System` namespace to your concrete types, so that they can be displayed in the inspector.
 ```C#
 [Serializable]
-public class MyImageThemeStyle : MyThemeStyleBase {```
+public class MyImageThemeStyle : MyThemeStyleBase {
+```
 
 3. Consider how instances of your theme style class will set their `StyleId` property (inherited from `ThemeStyleBase`), which identifies the specific style to which this instance applies. This depends upon how the theme definition class you will be creating later will create instances of these theme style classes; you can handle this in other ways and can come back to this step when you have made those decisions, but here is how you should handle `StyleId` if you intend to follow the recommended steps in this guide:
 	- For a simple theme, no special steps are necessary. The `SimpleThemeDefinitionBase` you will use later takes care of this step for you.
@@ -121,7 +124,8 @@ public abstract class MyThemeStyleBase : ThemeStyleBase<MyThemeStyleId> {
 [Serializable]
 public class MyImageThemeStyle : MyThemeStyleBase {
 	public MyImageThemeStyle(MyThemeStyleId id) : base(id) { }
-}```
+}
+```
 
 4. Add serializable fields and public getters for the properties you want to be configurable for this type of style. You can define your fields and getters separately, or use the combined syntax shown here, this is purely a matter of preference.
 ```C#
@@ -133,7 +137,8 @@ public class MyImageThemeStyle : MyThemeStyleBase {
 	public Sprite Sprite { get; private set; }
 	
 	public MyImageThemeStyle(MyThemeStyleId id) : base(id) { }
-}```
+}
+```
 
 5. For each concrete type, implement the `IProvidesThemeFor<T>` interface and its `ApplyThemeTo(T target)` method, where `T` is the component type to which this style should apply. This method will accept a component and apply the configured properties to it. It may be possible in some cases for a single theme style class to implement this interface for more than one type, but this is generally discouraged.
 ```C#
@@ -146,7 +151,8 @@ public class MyImageThemeStyle : MyThemeStyleBase, IProvidesThemeFor<Image> {
 		target.sprite = Sprite;
 		target.color = Color;
 	}
-}```
+}
+```
 
 #### A Theme Definition Class
 Now that you've defined what styles your theme will manage and how styles will be applied to certain component types, you need to tie these together to define which type of component each style is to be applied to, and how your theme styles are created. This is the responsibility of a theme definition class, which descends from the `ThemeDefinitionBase<TId, TStyle>` type. This is also the `ScriptableObject` type of which you will create an asset for each theme variation.
@@ -154,7 +160,8 @@ Now that you've defined what styles your theme will manage and how styles will b
 For a simple theme, this step is extremely straightforward: you need only create an empty class which inherits `SimpleThemeDefinitionBase<TId, TStyle, TTarget>`, where `TId` is your theme style ID enum, `TStyle` is your theme style class, and `TTarget` is the component type which `TStyle` can be applied to through the `IProvidesThemeFor<T>` interface. Then apply the `[CreateAssetMenu]` attribute to this class, so that you can create assets of this `ScriptableObject` type later. `SimpleThemeDefinitionBase` pre-defines all of the necessary features of a theme definition for you in the case of a simple theme.
 ```C#
 [CreateAssetMenu(menuName = "Themes/My Simple Theme")]
-public class MySimpleThemeDefinition : SimpleThemeDefinitionBase<MySimpleThemeId, MySimpleThemeStyle, TextMeshProUGUI> { }```
+public class MySimpleThemeDefinition : SimpleThemeDefinitionBase<MySimpleThemeId, MySimpleThemeStyle, TextMeshProUGUI> { }
+```
 
 A full theme naturally requires a little more work. Use the following steps to guide you through the process:
 
@@ -163,7 +170,8 @@ A full theme naturally requires a little more work. Use the following steps to g
 [CreateAssetMenu(menuName = "Themes/My Theme")]
 public class MyThemeDefinition : ThemeDefinitionBase<MyThemeStyleId, MyThemeStyleBase> {
 
-}```
+}
+```
 
 2. The recommended way to both associate each style ID to the correct style type and allow configuration of each style is simply to add a serialized field for each style ID, initializing it with a new instance of the appropriate theme style class.
 ```C#
@@ -176,7 +184,8 @@ public class MyThemeDefinition : ThemeDefinitionBase<MyThemeStyleId, MyThemeStyl
 	[SerializeField]
 	private MyImageThemeStyle iconStyle = new(MyThemeStyleId.Icon);
 	...
-}```
+}
+```
 
 3. Finally, implement the required `AllStyles` property and `GetStyle(TId styleId)` method from the base class. There are multiple ways to do this and the way you handled the previous step will impact the options available. The recommended implementation for simplicity and maintainability is to use an internal Dictionary, as demonstrated here. Note that because it references other instance fields, we cannot initialize this dictionary with a field initializer; here we have opted to initialize it in the ScriptableObject's OnEnable message. You may also consider lazy-loading or other methods.
 ```C#
@@ -204,7 +213,8 @@ public class MyThemeDefinition : ThemeDefinitionBase<MyThemeStyleId, MyThemeStyl
 	
 	public override MyThemeStyleBase GetStyle(MyThemeStyleId styleId)
 		=> styles.TryGetValue(styleId, out MyThemeStyleBase style) ? style : null;
-}```
+}
+```
 
 Now with your theme definition class created, you can create instances of it by right-clicking in a folder in the project window, and navigating to the Create option and finding it in the menu (in the example, `Create > Themes > My Theme`). You can create any number of variants and configure each one differently through the inspector. But we still need a couple more types to handle managing the currently active theme and applying styles to elements, though fortunately these ones are easy.
 
@@ -216,7 +226,8 @@ The theme manager class is a ScriptableObject type that manages the list of vali
 - `TSelf`: The manager type itself!
 ```C#
 [CreateAssetMenu(menuName = "Themes/My Theme Manager")]
-public class MyThemeManager : ThemeManagerBase<MyThemeDefinition, MyThemeStyleId, MyThemeStyleBase, MyThemeManager> { }```
+public class MyThemeManager : ThemeManagerBase<MyThemeDefinition, MyThemeStyleId, MyThemeStyleBase, MyThemeManager> { }
+```
 
 Note that there should only be one asset created for a particular theme manager class, and it *MUST* be located in a folder named "Resources" anywhere under the Assets folder. You might consider removing the CreateAssetMenu attribute after creating your one instance to prevent any additional instances from being made accidentally. In the asset's inspector, make sure to fill in the list of valid theme definition assets and set the current theme index to a valid index in the list as desired. Remember that changes made to ScriptableObjects like the manager or theme definitions made in the editor's play mode may affect the saved assets in the project, but this will not be the case in a build; you would have to implement a save system to handle this in a build, which is beyond the scope of this document.
 
@@ -239,4 +250,5 @@ public class MyThemedImage : MyThemedElementBase<Image> { }
 
 public class MyThemedRect : MyThemedElementBase<RectTransform> { }
 
-...```
+...
+```
