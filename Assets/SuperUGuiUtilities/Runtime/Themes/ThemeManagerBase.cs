@@ -12,7 +12,7 @@ namespace SuperUGuiUtilities {
 		public static TSelf Instance {
 			get {
 				if (_instance == null) {
-					_instance = Resources.FindObjectsOfTypeAll<TSelf>().ElementAtOrDefault(0);
+					_instance = Resources.LoadAll<TSelf>(string.Empty).ElementAtOrDefault(0);
 					if (_instance != null && _instance.TryGetThemeAt(_instance.CurrentThemeIndex, out TTheme curr)) {
 						curr.OnThemeUpdated -= _instance.FireThemeChanged;
 						curr.OnThemeUpdated += _instance.FireThemeChanged;
